@@ -1,18 +1,21 @@
 import Books from "./components/Books";
 import CreateBook from "./components/CreateBook";
+import Providers from "./providers/Providers";
 
 function App() {
   return (
     <main>
-      <h1 className="">Hello world</h1>
+      <Providers>
+        <h1 className="">Hello world</h1>
 
-      <CreateBook />
+        <CreateBook />
 
-      {/* <ErrorBoundary fallback={<p>Error loading books</p>}>
+        {/* <ErrorBoundary fallback={<p>Error loading books</p>}>
         <Suspense fallback={<p>Loading books...</p>}> */}
-      <Books />
-      {/* </Suspense>
+        <Books />
+        {/* </Suspense>
       </ErrorBoundary> */}
+      </Providers>
     </main>
   );
 }

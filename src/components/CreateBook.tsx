@@ -1,19 +1,23 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormEvent } from "react";
+import createBook from "../api/books/createBook";
 
 const CreateBook = () => {
+  const queryClient = useQueryClient();
+
+  const bookMutation = useMutation({
+    mutationFn: createBook,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["books"] });
+    },
+  });
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const formValues = Object.fromEntries(form);
     console.log("valeurs du formulaire ", formValues);
-
-    fetch("/api/books/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Indique que tu envoies du JSON
-      },
-      body: JSON.stringify(formValues),
-    });
+    bookMutation.mutate({ formValues });
   };
 
   return (

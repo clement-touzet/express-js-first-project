@@ -1,28 +1,33 @@
-import { useEffect, useState } from "react";
-
-type BookType = {
-  title: string;
-  id: string;
-};
+import { useQuery } from "@tanstack/react-query";
+import { booksQueryKey } from "../contants/queryKeys";
+import getBooks from "../api/books/getbooks";
+import DeleteBook from "./DeleteBook";
 
 const Books = () => {
-  const [books, setBooks] = useState<BookType[]>([]);
+  const { data } = useQuery({
+    queryKey: [booksQueryKey],
+    queryFn: getBooks,
+  });
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const response = await fetch("/api/books");
-      const data = await response.json();
-      setBooks(data);
-    };
-
-    fetchBooks();
-  }, []);
+  if (!data) {
+    return <p>No books found</p>;
+  }
 
   return (
     <div>
       <ul>
-        {books.map((book) => (
-          <li key={book.id}>{book.title}</li>
+        {data?.map((book) => (
+          <li
+            key={book.id}
+            style={{
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
+            }}
+          >
+            <p>{book.title}</p>
+            <DeleteBook idToDelete={book.id} />
+          </li>
         ))}
       </ul>
     </div>
